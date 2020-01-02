@@ -1,5 +1,14 @@
 # miniOS
-Project for university course
+Project for university course. It implements the followings:
+    - Defining paging tables  
+    - Activates paging  
+    - Switch to Long Mode: 64bits  
+    - Program PIC. Add interrupt handlers. Dump trap frame 
+    - Program timere  
+    - Program keyboard  
+    - Implementation of a console  
+    - Read sectors of a disk using PIO mode ATA
+    - Memory management: Allocates physical, virtual and heap memory  
 
 # Prerequisites
 -Bosch: Download from http://bochs.sourceforge.net/getcurrent.html and save it to:  
