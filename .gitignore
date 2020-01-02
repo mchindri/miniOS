@@ -1,3 +1,9 @@
+/utils/Bochs-2.6.8
+/local
+/kernel/x64
+/kernel/.vs/*
+*.VC.db
+*.VC.opendb
 # Prerequisites
 *.d
 
