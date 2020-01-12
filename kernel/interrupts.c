@@ -20,6 +20,30 @@ typedef struct{
 
 IDT_desc IDT[256];
 
+typedef void (*INTERRUP_HEADER)(void);
+
+INTERRUP_HEADER interrupt_functions[] = {
+__Divide_by_0,
+__Single_step,
+__Non_Maskable_Interrupt_Pin,
+__Breakpoint,
+__Overflow,
+__Bounds_check,
+__Undefined_OPCode,
+__No_coprocessor,
+__Double_Fault,
+__Coprocessor_Segment_Overrun,
+__Invalid_Task_State_Segment,
+__Segment_Not_Present,
+__Stack_Segment_Overrun,
+__General_Protection_Fault,
+__Page_Fault,
+0, //Unasigned
+__Coprocessor_error,
+__Alignment_Check,
+__Machine_Check
+};
+
 void setInterruptRutines() {
 	IDT_desc defautlDesc = {
 		.offset_1 = (WORD)__defaultInterruptHandler,
@@ -38,22 +62,20 @@ void setInterruptRutines() {
 	};
 
 	IDT_desc* p;
-	/* FILL IDT with default handler */
-	/*WORD i, f;
-	i = 0x9;
-	f = 0x15;
-	f--;
-	for (p = IDT + f; p >= IDT + i; *(p--) = defautlDesc);*/
-	//for (p = IDT + 255; p >= IDT; *(p--) = defautlDesc);
-	//for (p = IDT + 255; p >= IDT; memset(p--, 0, sizeof(*p)));
-	
-	//p = IDT + 0x8;
-	//memset(p, 0, sizeof(IDT_desc));
 
-
-	/* Define a default handler for test interrupts*/
-	p = IDT + 60;
-	*p = defautlDesc;
+	/* Fill the interrupt with the defaut handler */
+	for (int i = 0; i < 19; i++)
+	{
+		INTERRUP_HEADER fun = interrupt_functions[i];
+		if (fun) {
+			IDT_desc intDesc = defautlDesc;
+			intDesc.offset_1 = (WORD)fun;
+			intDesc.offset_2 = (WORD)((QWORD)fun >> 16);
+			intDesc.offset_3 = (DWORD)((QWORD)fun >> 32);
+			p = IDT + i; //Timer entry
+			*p = intDesc;
+		}
+	}
 
 	IDT_desc timerDesc = defautlDesc;
 	timerDesc.offset_1 = (WORD)__timerHandler;
@@ -78,6 +100,9 @@ void setInterruptRutines() {
 	__lidt(&desc);
 }
 
-void defaultInterruptHandler() {
-	Print("Default interrupt");
+void defaultInterruptHandler(QWORD intId) {
+	//__magic();
+	consolePrint("Default Interrupt ( ");
+	PrintNb(intId, 10);
+	consolePrint(" )\n");
 }

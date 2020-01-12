@@ -4,8 +4,7 @@ KERNEL_SECTORS equ 50
 
 [org 0x7E00]
 [bits 16]
-SSL:
-    ;break    
+SSL: 
     mov    ah,    02h               ; parameters for calling int13 (ReadSectors) - read the Kernel
     mov    al,    KERNEL_SECTORS    ; read KERNEL_SECTORS sectors (hardcoded space for Kernel)
     mov    ch,    00h     
@@ -13,12 +12,23 @@ SSL:
     mov    dh,    00h     
     mov    bx,    0x9200            ; memory from 0x7E00 - 0x9200 used by SLL;  0x9200 - 0x9FFFF is unused
     int    13h             
-    jnc    .success        
-  
+    jc    .fail
+    ;one copy dont work
+    mov    ah,    02h               ; parameters for calling int13 (ReadSectors) - read the Kernel
+    mov    al,    5    ; read KERNEL_SECTORS sectors (hardcoded space for Kernel)
+    mov    ch,    00h     
+    mov    cl,    0Bh               ; starting from sector 11 - skip first 10 sectors (the MBR + SSL)
+    mov    dh,    00h     
+    mov    bx,    0xF600            ; memory from 0x7E00 - 0x9200 used by SLL;  0x9200 - 0x9FFFF is unused
+    int    13h             
+    jnc    .success 
+.fail:
+    break;
     cli                    ; we should reset drive and retry, but we hlt
     hlt                     
  
 .success:                      
+    ;break
     cli                    ; starting RM to PM32 transition
     lgdt   [GDT]
     mov    eax,    cr0

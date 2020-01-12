@@ -34,14 +34,20 @@ void wait(QWORD ms)
 	while (g_ms - init < ms);
 }
 
-//#define PRINT_SECONDS
+int enabled;
+void enableTimer(int status) {
+	enabled = status;
+}
 
 void timerHandler() {
 	g_ms++;
 
-#ifdef PRINT_SECONDS
-	if (g_ms % 1000 == 0)
-		PrintNb(g_ms / 1000, 10);
-#endif
+	if (enabled && g_ms % 1000 == 0) {
+		char buff2[20];
+		//PrintNb(g_ms / 1000, 10);
+		_printNb(g_ms / 1000, 10, buff2);
+		PrintRight(buff2);
+	}
+
 	//__iret_PIC1(); //return ;
 }

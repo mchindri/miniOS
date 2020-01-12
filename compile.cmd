@@ -1,2 +1,1 @@
-@echo off
-".\utils\makeFloppy.py" ".\boot\mbr.asm" ".\boot\ssl.asm"
+python3 ".\utils\makeFloppy.py" ".\boot\mbr.asm" ".\boot\ssl.asm"

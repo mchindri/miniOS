@@ -33,8 +33,8 @@ size = out.tell()
 for i in range(0, ((512*10) - size)):
     out.write(b'\0')
 
-if (os.path.getsize(kernelPath) > 50*512):
-    print("\n Warning: Kernel size > 50 sectors!\n") #citeste doar 50 pentru ca asa e setat ssl
+if (os.path.getsize(kernelPath) > 100 *512):
+    print("\n Warning: Kernel size > 100 sectors!\n") #citeste doar 50 pentru ca asa e setat ssl
     
 #write the kernel
 out.write(open(kernelPath, "rb").read())

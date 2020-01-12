@@ -69,6 +69,22 @@ void Print(char*str)
     CursorPosition(i % MAX_OFFSET);
 }
 
+void PrintRight(char* str) {
+
+    int i, len;
+    len = 0;
+    while (str[len] != 0)
+    {
+        len++;
+    }
+    int j = 0;
+    for (i = MAX_COLUMNS + MAX_COLUMNS - len - 1; i < MAX_COLUMNS + MAX_COLUMNS - 1; i++)
+    {
+        gVideo[i % MAX_OFFSET].color = 10;
+        gVideo[i % MAX_OFFSET].c = str[j++];
+    }
+}
+
 void ClearScreen()
 {
     int i;
@@ -82,21 +98,7 @@ void ClearScreen()
     CursorMove(0, 0);
 }
 
-void PrintNb(QWORD nb, int base) {
-	char buff[20];
-    char buff2[20];
-    itoa(nb, buff, base);
-    //REvers nb
-    char* p;
-    for (p = buff; *p; p++);
-    p--;
-    char *q = buff2;
-    while (p >= buff)
-        *(q++) = *(p--);
-    *q = 0;
-    Print(buff2);
-    //__magic();
-}
+
 
 void itoa(QWORD n, char* buffer , int base) {
     //int n = abs(value);
